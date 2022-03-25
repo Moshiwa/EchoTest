@@ -1,0 +1,227 @@
+openapi: 3.0.3
+info:
+  title: Article
+  description: Articles actions
+  version: 1.0.0
+servers:
+  - url: 'http'
+paths:
+  /authors:
+    get:
+      tags:
+        - Article
+      summary: Get authors
+      description: Getting list authors
+      parameters:
+        - name: page
+          in: query
+          description: Pagination
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - name: date_birth
+          in: query
+          description: Year of birth author
+          required: false
+          schema:
+            type: string
+            example: '1990'
+        - name: sort
+          in: query
+          description: Sort by field
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrderByASC'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Author'
+
+  /categories:
+    get:
+      tags:
+        - Article
+      summary: Get categories
+      description: Getting categories
+      parameters:
+        - name: page
+          in: query
+          description: Pagination
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: Sort by field
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrderByDESC'
+        - name: search
+          in: query
+          description: Search by name
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+
+  /articles:
+    get:
+      tags:
+        - Article
+      summary: Get articles
+      description: Getting articles
+      parameters:
+        - name: page
+          in: query
+          description: Pagination
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: Sort by field
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrderByDESC'
+        - name: search
+          in: query
+          description: Search by name
+          required: false
+          schema:
+            type: string
+        - name: author
+          description: Author id
+          required: false
+          schema:
+            type: integer
+        - name: category
+          description: Author id
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Article'
+
+components:
+  schemas:
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Author id
+          example: 1
+        full_name:
+          type: string
+          description: Author full name
+          example: Ivanov Ivan Ivanovich
+        image:
+          type: string
+          description: Url to image
+          example: https://via.placeholder.com/640x480.png/0077aa?text=eius
+        date_birth:
+          type: string
+          description: Date of birth author
+          example: '1984-06-23'
+        biography:
+          type: string
+          description: Author biography
+          example: Qui autem natus maxime. Placeat voluptatem expedita rerum esse rem ea nobis quia. Iste voluptatem in illum omnis itaque. Odio itaque iure molestiae non temporibus odio.
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Category id
+          example: 1
+        name:
+          type: string
+          description: Category name
+          example: Lorem ipsum
+        image:
+          type: string
+          description: Url to image
+          example: https://via.placeholder.com/640x480.png/0077aa?text=eius
+        description:
+          type: string
+          description: Category description
+          example: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Article id
+          example: 1
+        name:
+          type: string
+          description: Article name
+          example: Lorem ipsum
+        image:
+          type: string
+          description: Url to image
+          example: https://via.placeholder.com/640x480.png/0077aa?text=eius
+        announcement:
+          type: string
+          description: Article announcement
+          example: Lorem ipsum
+        text:
+          type: string
+          description: Article content
+          example: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+        author:
+          $ref: '#/components/schemas/Author'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        created_at:
+          type: string
+          description: Article created at
+          example: '25-03-2022 09:40:54'
+        updated_at:
+          type: string
+          description: Article update at
+          example: '25-03-2022 09:40:54'
+
+    OrderByASC:
+      type: string
+      description: 'If first symbol is "*" then order by ASC'
+      example: '*name'
+
+    OrderByDESC:
+      type: string
+      description: 'If first symbol is`t "*" then order by DESC'
+      example: 'name'
